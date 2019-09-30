@@ -37,9 +37,6 @@ class NavBar extends React.Component {
                         <Link className="nav-bar-link" to="/survey">Submit Offer</Link>
                     </Col>
                     <Col sm="auto">
-                        <Link className="nav-bar-link" to="/trial">Trial Page</Link>
-                    </Col>
-                    <Col sm="auto">
                         <Link className="nav-bar-link" to="/negotiation-tips">Negotiation Tips</Link>
                     </Col>
                 </Nav>

@@ -32,13 +32,14 @@ class App extends Component {
 
                 <div>
                     <NavBar />
+                    <h1>Test</h1>
                     <div className='display-page'>
                         <Switch>
                             <Route exact={true} path='/' component={WelcomePage} />
                             <Route exact={true} path='/offers' component={OffersPage} />
                             <Route exact={true} path='/negotiation-tips' component={NegotiationPage} />
                             <Route exact={true} path='/survey' component={SurveyPage} />
-                            <Route exact={true} path='/trial' component={TrialPage} />
+                            {/* <Route exact={true} path='/trial' component={TrialPage} /> */}
                         </Switch>
                     </div>
                 </div>
