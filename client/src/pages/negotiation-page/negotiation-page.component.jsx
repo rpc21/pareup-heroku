@@ -74,7 +74,24 @@ const quotes = [
 class NegotiationPage extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            width: window.innerWidth,
+        };
     }
+
+    componentWillMount() {
+        window.addEventListener('resize', this.handleWindowSizeChange);
+    }
+
+    // make sure to remove the listener
+    // when the component is not mounted anymore
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.handleWindowSizeChange);
+    }
+
+    handleWindowSizeChange = () => {
+        this.setState({ width: window.innerWidth });
+    };
 
     // container = React.createRef();
 
@@ -93,103 +110,156 @@ class NegotiationPage extends React.Component {
     //   }
 
     render() {
-        return (
-            <div id="container" ref={this.container} style={{ paddingTop:75 }} >
-                <h1 style={{ color: `#007788`, fontSize: 65, textAlign: "center" }}> 10 Tips for Negotiating Your Best Offer </h1>
-                <h2 style={{ textAlign: "center" }}> Not sure what to do or say when negotiating?  Check out these helpful tips! </h2>
-                <Stickyroll pages={headlines} factor={0.25}>
-                    {({ page, pageIndex, pages, progress }) => {
-                        return (
-                            <div classname="scrollpage" style={{
-                                // paddingTop: 150,
-                                minHeight: '90%',
-                                // display: 'flex',
-                                // alignItems: 'center',
-                                // justifyContent: 'center',
-                            }} >
-                                {pageIndex == 0 ?
-                                    <div>
-                                        {/* <h1 style={{ color: `#007788`, fontSize: 65, textAlign: "center" }}> 10 Tips for Negotiating Your Best Offer </h1> */}
-                                        {/* <h2 style={{ textAlign: "center" }}> Not sure what to do or say when negotiating?  Check out these helpful tips! </h2> */}
-                                    </div>
-                                    :
-                                    <br />}
+        const { width } = this.state;
+        const isTooNarrow = width <= 1250;
+        if (!isTooNarrow) {
+            return (
+                <div id="container" ref={this.container} style={{ paddingTop: 75 }} >
+                    <h1 style={{ color: `#007788`, fontSize: 65, textAlign: "center" }}> 10 Tips for Negotiating Your Best Offer </h1>
+                    <h2 style={{ textAlign: "center" }}> Not sure what to do or say when negotiating?  Check out these helpful tips! </h2>
+                    <Stickyroll pages={headlines} factor={0.25}>
+                        {({ page, pageIndex, pages, progress }) => {
+                            return (
+                                <div classname="scrollpage" style={{
+                                    // paddingTop: 150,
+                                    minHeight: '90%',
+                                    // display: 'flex',
+                                    // alignItems: 'center',
+                                    // justifyContent: 'center',
+                                }} >
+                                    {pageIndex == 0 ?
+                                        <div>
+                                            {/* <h1 style={{ color: `#007788`, fontSize: 65, textAlign: "center" }}> 10 Tips for Negotiating Your Best Offer </h1> */}
+                                            {/* <h2 style={{ textAlign: "center" }}> Not sure what to do or say when negotiating?  Check out these helpful tips! </h2> */}
+                                        </div>
+                                        :
+                                        <br />}
 
 
 
-                                {pageIndex % 2 == 0 ?
-                                    <Row style={{
-                                        // backgroundColor: `#FF0000`
-                                        paddingTop: 150,
-                                    }}>
-                                        <Col classname="numcol" md={3} style={{
-                                            textAlign: "center"
+                                    {pageIndex % 2 == 0 ?
+                                        <Row style={{
+                                            // backgroundColor: `#FF0000`
+                                            paddingTop: 150,
                                         }}>
-                                            <span class="bignum" >{pageIndex + 1}</span>
-                                        </Col>
-                                        <Col md={9} style={{
-                                            paddingTop: 100
-                                        }}>
-                                            <h1>{headlines[pageIndex]}</h1>
-                                            <br />
-                                            <div style={{ color: '#808080' }}>
-                                                <ul>
-                                                    {content[pageIndex].map((value) => {
-                                                        return <li style={{ listStyleType: 'space-counter' }}><h4>{value}</h4></li>
+                                            <Col classname="numcol" md={3} style={{
+                                                textAlign: "center"
+                                            }}>
+                                                <span class="bignum" >{pageIndex + 1}</span>
+                                            </Col>
+                                            <Col md={9} style={{
+                                                paddingTop: 100
+                                            }}>
+                                                <h1>{headlines[pageIndex]}</h1>
+                                                <br />
+                                                <div style={{ color: '#808080' }}>
+                                                    <ul>
+                                                        {content[pageIndex].map((value) => {
+                                                            return <li style={{ listStyleType: 'space-counter' }}><h4>{value}</h4></li>
+                                                        })}
+                                                    </ul>
+                                                    {quotes[pageIndex].map((value) => {
+                                                        return <div><h4><i>"{value}"</i></h4> <br /></div>
                                                     })}
-                                                </ul>
-                                                {quotes[pageIndex].map((value) => {
-                                                    return <div><h4><i>"{value}"</i></h4> <br /></div>
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                        :
+                                        <Row style={{
+                                            // backgroundColor: `#FF0000`,
+                                            textAlign: "right",
+                                            paddingTop: 150
+                                        }}>
+                                            <Col md={9} style={{
+                                                paddingTop: 100
+                                            }}>
+                                                <h1>{headlines[pageIndex]}</h1>
+                                                <br />
+                                                {content[pageIndex].map((value) => {
+                                                    return <div><h5 style={{ color: '#808080' }}>{value}</h5> <br /></div>
                                                 })}
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    :
-                                    <Row style={{
-                                        // backgroundColor: `#FF0000`,
-                                        textAlign: "right",
-                                        paddingTop:150
-                                    }}>
-                                        <Col md={9} style={{
-                                            paddingTop: 100
-                                        }}>
-                                            <h1>{headlines[pageIndex]}</h1>
-                                            <br />
-                                            {content[pageIndex].map((value) => {
-                                                return <div><h5 style={{ color: '#808080' }}>{value}</h5> <br /></div>
-                                            })}
-                                            {quotes[pageIndex].map((value) => {
-                                                return <div><h4 style={{ color: '#808080' }}><i>"{value}"</i></h4> <br /></div>
-                                            })}
-                                        </Col>
-                                        <Col classname="numcol" md={3} style={{
-                                            textAlign: "center"
-                                        }}>
-                                            <span class="bignum" >{pageIndex + 1}</span>
-                                        </Col>
-                                    </Row>
-                                }
-                            </div>
+                                                {quotes[pageIndex].map((value) => {
+                                                    return <div><h4 style={{ color: '#808080' }}><i>"{value}"</i></h4> <br /></div>
+                                                })}
+                                            </Col>
+                                            <Col classname="numcol" md={3} style={{
+                                                textAlign: "center"
+                                            }}>
+                                                <span class="bignum" >{pageIndex + 1}</span>
+                                            </Col>
+                                        </Row>
+                                    }
+                                </div>
 
-                        );
-                    }}
-                </Stickyroll>
+                            );
+                        }}
+                    </Stickyroll>
 
 
-                <MDBContainer className="align-middle">
-                    <Row>
-                        <Col lg="2">
-                            <Image src={ada_photo} width="150px" roundedCircle />
+                    <MDBContainer className="align-middle">
+                        <Row>
+                            <Col lg="2">
+                                <Image src={ada_photo} width="150px" roundedCircle />
+                            </Col>
+                            <Col lg="10" style={{ paddingTop: 15 }}>
+                                <br></br>
+                                <i>Ada Gregory is the Associate Director of the Kenan Institute for Ethics at Duke.  Ada graduated from Duke (BA/MA) and went on to work at the state and local levels for 20 years influencing policy and practice related to victims’ rights, violence against women, and criminal justice reform. She returned to Duke in 2006 and worked in several capacities, including as director of the Duke Women’s Center and chief administrator for the university’s signature institutes and initiatives, before joining the Kenan Institute for Ethics in 2018.</i>
+                            </Col>
+                        </Row>
+                    </MDBContainer>
+                </div>
+
+            )
+        }
+        else {
+            const items = [];
+            for (var pageIndex = 0; pageIndex < 10; pageIndex++) {
+                items.push(
+                    <Row style={{
+                        // backgroundColor: `#FF0000`
+                        paddingTop: 150,
+                    }}>
+                        <Col classname="numcol" md={3} style={{
+                            textAlign: "center"
+                        }}>
+                            <span class="bignum" >{pageIndex + 1}</span>
                         </Col>
-                        <Col lg="10" style={{ paddingTop: 15 }}>
-                            <br></br>
-                            <i>Ada Gregory is the Associate Director of the Kenan Institute for Ethics at Duke.  Ada graduated from Duke (BA/MA) and went on to work at the state and local levels for 20 years influencing policy and practice related to victims’ rights, violence against women, and criminal justice reform. She returned to Duke in 2006 and worked in several capacities, including as director of the Duke Women’s Center and chief administrator for the university’s signature institutes and initiatives, before joining the Kenan Institute for Ethics in 2018.</i>
+                        <Col md={9} style={{
+                            paddingTop: 100
+                        }}>
+                            <h1>{headlines[pageIndex]}</h1>
+                            <br />
+                            <div style={{ color: '#808080' }}>
+                                <ul>
+                                    {content[pageIndex].map((value) => {
+                                        return <li style={{ listStyleType: 'space-counter' }}><h4>{value}</h4></li>
+                                    })}
+                                </ul>
+                                {quotes[pageIndex].map((value) => {
+                                    return <div><h4><i>"{value}"</i></h4> <br /></div>
+                                })}
+                            </div>
                         </Col>
                     </Row>
-                </MDBContainer>
-            </div>
-
-        )
+                )
+            }
+            return (
+                <div>
+                    {items}
+                    <MDBContainer className="align-middle">
+                        <Row>
+                            <Col lg="2">
+                                <Image src={ada_photo} width="150px" roundedCircle />
+                            </Col>
+                            <Col lg="10" style={{ paddingTop: 15 }}>
+                                <br></br>
+                                <i>Ada Gregory is the Associate Director of the Kenan Institute for Ethics at Duke.  Ada graduated from Duke (BA/MA) and went on to work at the state and local levels for 20 years influencing policy and practice related to victims’ rights, violence against women, and criminal justice reform. She returned to Duke in 2006 and worked in several capacities, including as director of the Duke Women’s Center and chief administrator for the university’s signature institutes and initiatives, before joining the Kenan Institute for Ethics in 2018.</i>
+                            </Col>
+                        </Row>
+                    </MDBContainer>
+                </div>
+            )
+        }
     }
 }
 
