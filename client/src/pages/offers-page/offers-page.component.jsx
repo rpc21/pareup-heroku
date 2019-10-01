@@ -35,7 +35,7 @@ class OffersPage extends React.Component {
     constructor(props) {
         super(props);
 
-        this.num_entries_needed = 1;
+        this.num_entries_needed = 3;
 
         this.state = {
             intervalIsSet: false,
