@@ -33,6 +33,7 @@ class NavBar extends React.Component {
 
     componentWillMount() {
         window.addEventListener('resize', this.handleWindowSizeChange);
+        this.setState({ width: window.innerWidth });
     }
 
     // make sure to remove the listener
