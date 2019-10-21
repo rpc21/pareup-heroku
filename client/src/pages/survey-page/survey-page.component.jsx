@@ -1,12 +1,20 @@
 import React from 'react';
 import { DropdownList } from 'react-widgets'
+import { Multiselect } from 'react-widgets';
 import ED_LEVELS from '../../fields/ed_levels';
 import JOB_TITLES from '../../fields/job_titles';
 import NEGOTIATED from '../../fields/negotiated';
 import COMPANY_SIZES from '../../fields/company_sizes';
+import RACES from '../../fields/races';
+import PRONOUNS from '../../fields/pronouns';
 import 'react-widgets/dist/css/react-widgets.css'
-import { Jumbotron, Row, Col, Container, Form, Button } from "react-bootstrap"
+import { Jumbotron, Row, Col, Container, Form, Button, Modal } from "react-bootstrap"
 import './survey-page.component.css';
+import STATE_CITY_LIST from '../../fields/states_cities';
+import STATES from '../../fields/states';
+import { Dropdown } from 'semantic-ui-react'
+import { useState } from 'react';
+
 
 import axios from 'axios';
 
@@ -16,109 +24,264 @@ class SurveyPage extends React.Component {
 
         this.state = {
             intervalIsSet: false,
-            ed_levels: ED_LEVELS,
-            job_titles: JOB_TITLES,
-            negotiated: NEGOTIATED,
-            company_sizes: COMPANY_SIZES,
-            radius: 50,
-            zipcode_filter: 80230,
-            valid_zips: [],
-            data: []
+
+            job_title: "",
+            ed_level: "",
+            company_size: "",
+            salary: 0,
+            equity: 0,
+            negotiated: "",
+            one_time: 0,
+            selected_state: "Alabama",
+            selected_city: "Abanda",
+            selected_lat: 0,
+            selected_long: 0,
+            race: "",
+            // ethnicity: "",
+            pronouns: "",
+            data: [],
+            show: false
+
         }
+
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleClear = this.handleClear.bind(this);
+
+
     }
 
 
-    // our put method that uses our backend api
-    // to create new query into our data base
-    putDataToDB = ({ location, salary, internships, equity, signing_bonus }) => {
-        console.log(location);
+    handleSubmit(event) {
+        event.preventDefault();
+
         let currentIds = this.state.data.map((data) => data.id);
         let idToBeAdded = 0;
         while (currentIds.includes(idToBeAdded)) {
             ++idToBeAdded;
         }
 
-        axios.post('http://localhost:3001/api/putData', {
-            location: location,
-            salary: salary,
-            internships: internships,
-            equity: equity,
-            signing_bonus: signing_bonus
-        });
-    };
+        axios.post('/api/putData', {
+            job_title: this.state.job_title,
+            ed_level: this.state.ed_level,
+            company_size: this.state.company_size,
+            salary: this.state.salary,
+            equity: this.state.equity,
+            negotiated: this.state.negotiated,
+            one_time: this.state.one_time,
+            lat: this.state.selected_lat,
+            long: this.state.selected_long,
+            race: this.state.race,
+            ethnicity: this.state.ethnicity,
+            pronouns: this.state.pronouns
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        this.setState({ show: true })
+        this.handleClear(event);
+    }
+
+    handleClear(event) {
+        this.setState({
+            job_title: "",
+            ed_level: "",
+            company_size: "",
+            salary: "",
+            equity: "",
+            negotiated: "",
+            one_time: "",
+            selected_state: "Alabama",
+            selected_city: "Abanda",
+            selected_lat: 0,
+            selected_long: 0,
+            race: "",
+            ethnicity: "",
+            pronouns: "",
+            data: []
+        })
+    }
+
+
+
 
     render() {
-        return (
-            <div className='App' style={{ paddingTop: 75 }} >
-                <h1>Survey Page - Enter your offer info here!</h1>
-                <Form className='filter-list'>
-                    <Form.Row>
-                        <Col>
-                            <Form.Label>Education Level</Form.Label>
-                            <DropdownList className="filter" data={ED_LEVELS} textField='name'
-                                placeholder='All Education Levels'
-                                valueField='name'
-                                onChange={value => this.setState((value.length > 0) ?
-                                    { ed_levels: value } : { ed_levels: ED_LEVELS }, () => console.log(this.state))} />
-                        </Col>
-                        <Col>
-                            <Form.Label>Job Title</Form.Label>
-                            <DropdownList className="filter" data={JOB_TITLES} textField='name'
-                                placeholder='All Job Titles'
-                                valueField='name'
-                                onChange={value => this.setState((value.length > 0) ?
-                                    { job_titles: value } : { job_titles: JOB_TITLES }, () => console.log(this.state))} />
-                        </Col>
-                    </Form.Row>
-                    <Form.Row>
-                        <Col>
-                            <Form.Label>Negotiation Status</Form.Label>
-                            <DropdownList className="filter" data={NEGOTIATED} textField='name'
-                                placeholder='All Negotiation Statuses'
-                                valueField='value'
-                                onChange={value => this.setState((value.length > 0) ?
-                                    { negotiated: value } : { negotiated: NEGOTIATED }, () => console.log(this.state))} />
-                        </Col>
-                        <Col>
-                            <Form.Label>Company Size</Form.Label>
-                            <DropdownList className="filter" data={COMPANY_SIZES} textField='name'
-                                placeholder='All Company Sizes'
-                                valueField='name'
-                                onChange={value => this.setState((value.length > 0) ?
-                                    { company_sizes: value } : { company_sizes: COMPANY_SIZES }, () => console.log(this.state))} />
-                        </Col>
-                    </Form.Row>
-                    <Form.Row style={{ marginTop: '5px' }}>
-                        <Col>
-                            <Form.Label className="mt-auto">Show companies within</Form.Label>
-                            <input
-                                className="mt-auto"
-                                type="text"
-                                style={{ width: '40px', marginLeft: '10px', marginRight: '10px', borderRadius: '5px', borderWidth: '1px', height: '45px', textAlign: 'center' }}
-                                onChange={(e) => this.setState({ radius: e.target.value })}
-                                placeholder="#"
-                            />
 
-                            <Form.Label>miles of the zipcode</Form.Label>
-                            <input
-                                className="mt-auto"
-                                type="text"
-                                style={{ width: '100px', marginLeft: '10px', marginRight: '10px', borderRadius: '5px', borderWidth: '1px', height: '45px', textAlign: 'center' }}
-                                onChange={(e) => this.setState({ zipcode_filter: e.target.value })}
-                                placeholder="zipcode"
-                            />
-                        </Col>
-                        <Col>
-                            <Button onClick={(e) => {
-                                e.preventDefault();
-                                // this.findZipCodes(this.state.zipcode_filter, this.state.radius).then(console.log("finished"))
-                            }}
-                                style={{ backgroundColor: '#1d60b8', borderColor: '#1d60b8', fontSize: '20px' }}>
-                                Submit Offer Information
+        return (
+            <div style={{ paddingTop: 70 }} className='App'>
+                <h1 style={{ color: `#007788`, textAlign: "left", display: "inline" }}> Submit your Offer</h1>
+                <h4 style={{ color: `#007788`, textAlign: "left", display: "inline" }}> <i>by filling in the survey below</i></h4><br />
+                <h5>We understand that talking about money and salaries is sometimes considered taboo, but the more transparent we all become about our offers, the closer we will get to achieving pay equity for all. Your response will remain completely anonymous. We thank you for your help and encourage you to join the fight for pay equity!</h5>
+                <br />
+                <div className="form-container">
+                    <Form className='filter-list'>
+                        <h3>Company Information (Required)</h3>
+                        <Form.Row>
+                            <Col>
+                                <Form.Label>Company Location</Form.Label>
+                                <br></br>
+                                <Dropdown placeholder='State'
+                                    search selection options={STATES.map(dat => ({ key: dat, value: dat, text: dat }))}
+                                    onChange={(event, val) => this.setState({ selected_state: val.value }, () => console.log())} />
+                                <Dropdown placeholder='City'
+                                    search selection options={STATE_CITY_LIST[this.state.selected_state].map(dat => ({ key: dat.city, value: dat.city, text: dat.city }))}
+                                    onChange={(event, val) => this.setState({
+                                        selected_city: val.value,
+                                        selected_lat: STATE_CITY_LIST[this.state.selected_state].filter(function getSelCityObject(object) {
+                                            return object.city == val.value
+                                        })[0].lat,
+                                        selected_long: STATE_CITY_LIST[this.state.selected_state].filter(function getSelCityObject(object) {
+                                            return object.city == val.value
+                                        })[0].long
+                                    }, () => console.log(this.state))} />
+
+                                <br></br>
+                            </Col>
+                            <Col>
+                                <Form.Label>Company Size</Form.Label>
+                                <br></br>
+                                <Dropdown placeholder='Select the company size'
+                                    search selection options={COMPANY_SIZES.map(dat => ({ key: dat.name, value: dat.value, text: dat.name }))}
+                                    onChange={(event, val) => this.setState({
+                                        company_size: val.value
+                                    }, () => console.log(this.state))} />
+                                <br></br>
+                            </Col>
+                        </Form.Row>
+                        <br></br>
+                        <h3>Compensation Information (Required)</h3>
+                        <Form.Row>
+                            <Col>
+                                <Form.Label>Base Salary </Form.Label>
+                                <br></br>
+                                <input className="number-input"
+                                    type="number"
+                                    name="salary"
+                                    placeholder="$"
+                                    required={true}
+                                    onChange={(event) => this.setState({
+                                        salary: event.target.value
+                                    }, () => console.log(this.state))} />
+                                <br></br>
+                                <br></br>
+                                <Row>
+                                    <Col>
+                                        <Form.Label>One-Time Bonuses </Form.Label>
+                                        <br></br>
+                                        <input className="number-input"
+                                            type="number"
+                                            name="bonus"
+                                            placeholder="$, 0 if N/A"
+                                            required={true}
+                                            onChange={(event) => this.setState({
+                                                one_time: event.target.value
+                                            }, () => console.log(this.state))} />
+                                        <br></br>
+                                    </Col>
+
+                                    <Col>
+                                        <Form.Label>Equity</Form.Label>
+                                        <br></br>
+                                        <input className="percent-input"
+                                            type="number"
+                                            name="equity"
+                                            placeholder="$, 0 if N/A"
+                                            required={true}
+                                            onChange={(event) => this.setState({
+                                                equity: event.target.value
+                                            }, () => console.log(this.state))} />
+                                        <br></br>
+                                    </Col>
+                                </Row>
+
+                                <br></br>
+                                <Form.Label>Did you negotiate this offer?</Form.Label>
+                                <br></br>
+                                <Dropdown placeholder='Select Yes or No'
+                                    search selection options={NEGOTIATED.map(dat => ({ key: dat.name, value: dat.value, text: dat.value }))}
+                                    onChange={(event, val) => this.setState({
+                                        negotiated: val.value
+                                    }, () => console.log(this.state))} />
+                                <br></br>
+                            </Col>
+                            <Col>
+                                <Form.Label>Job Title</Form.Label>
+                                <br></br>
+                                <Dropdown placeholder='Select your job title'
+                                    search selection options={JOB_TITLES.map(dat => ({ key: dat.name, value: dat.value, text: dat.value }))}
+                                    onChange={(event, val) => this.setState({
+                                        job_title: val.value
+                                    }, () => console.log(this.state))} />
+                                <br></br>
+                                <br></br>
+                                <Form.Label>Education Level</Form.Label>
+                                <br></br>
+                                <Dropdown placeholder='Select your current or most recent level of education'
+                                    search selection options={ED_LEVELS.map(dat => ({ key: dat.name, value: dat.value, text: dat.value }))}
+                                    onChange={(event, val) => this.setState({
+                                        ed_level: val.value
+                                    }, () => console.log(this.state))} />
+                                <br></br>
+                            </Col>
+                        </Form.Row>
+                        <br></br>
+                        <h3>Personal Information (Optional)</h3>
+                        <Form.Row>
+                            <Col>
+                                <Form.Label>Race</Form.Label>
+                                <br></br>
+                                <Dropdown placeholder='Select the race you most closely identify with'
+                                    search selection options={RACES.map(dat => ({ key: dat.name, value: dat.value, text: dat.value }))}
+                                    onChange={(event, val) => this.setState({
+                                        race: val.value
+                                    }, () => console.log(this.state))} />
+                                <br></br>
+                            </Col>
+                            <Col>
+                                <Form.Label>Personal Pronouns</Form.Label>
+                                <br></br>
+                                <Dropdown placeholder='Select the pronouns you most closely identify with'
+                                    search selection options={PRONOUNS.map(dat => ({ key: dat.name, value: dat.value, text: dat.value }))}
+                                    onChange={(event, val) => this.setState({
+                                        pronouns: val.value
+                                    }, () => console.log(this.state))} />
+                                <br></br>
+                            </Col>
+                            <br></br>
+                        </Form.Row>
+                        <Form.Row style={{ marginTop: '50px' }}>
+                            {/* <Button className="clear-btn" 
+                                    align="center" 
+                                    onClick={this.handleClear}>
+                                    Clear
+                            </Button> */}
+                            <Button className="submit-btn"
+                                align="center"
+                                onClick={this.handleSubmit}>
+                                Submit
                             </Button>
-                        </Col>
-                    </Form.Row>
-                </Form>
+                            <Modal show={this.state.show}>
+                                <Modal.Header>
+                                    <Modal.Title>Thank you for submitting your offer!</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Footer>
+                                <Button size="lg" style={{ backgroundColor: '#007788', borderColor: '#007788' }}>
+                                        <a href="/survey" className="nav-bar-link no-effect-on-hover">
+                                            Submit Another Offer
+                            </a>
+                                    </Button>
+                                    <Button size="lg" style={{ backgroundColor: '#007788', borderColor: '#007788' }}>
+                                        <a href="/offers" className="nav-bar-link no-effect-on-hover">
+                                            Browse Offers
+                            </a>
+                                    </Button>
+                                </Modal.Footer>
+                            </Modal>
+                        </Form.Row>
+                    </Form>
+                </div>
             </div>
         )
     }
