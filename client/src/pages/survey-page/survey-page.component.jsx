@@ -229,14 +229,16 @@ class SurveyPage extends React.Component {
                         <br></br>
                         <h3>Personal Information (Optional)</h3>
                         <Form.Row>
-                            <Col>
+                        <Col>
                                 <Form.Label>Race</Form.Label>
                                 <br></br>
-                                <Dropdown placeholder='Select the race you most closely identify with'
-                                    search selection options={RACES.map(dat => ({ key: dat.name, value: dat.value, text: dat.value }))}
-                                    onChange={(event, val) => this.setState({
-                                        race: val.value
-                                    }, () => console.log(this.state))} />
+                                <Dropdown   className='dropdown'
+                                            value={this.state.race}
+                                            placeholder='Select the race(s) you identify with'
+                                            fluid multiple search selection options={RACES.map(dat => ({ key: dat.name, value: dat.value, text: dat.value}))}
+                                            onChange={(event, val) => this.setState({
+                                                race: val.value
+                                            }, () => console.log(this.state))} />
                                 <br></br>
                             </Col>
                             <Col>
