@@ -37,7 +37,7 @@ class SurveyPage extends React.Component {
             selected_lat: 0,
             selected_long: 0,
             race: "",
-            // ethnicity: "",
+            ethnicity: "",
             pronouns: "",
             data: [],
             show: false
@@ -239,6 +239,27 @@ class SurveyPage extends React.Component {
                                             onChange={(event, val) => this.setState({
                                                 race: val.value
                                             }, () => console.log(this.state))} />
+                                <br></br>
+                                <Form.Label>Do you identify as Hispanic or Latinx?</Form.Label>
+                                <div className="radio">
+                                  <label>
+                                    <input  type="radio" 
+                                            value="hispanic_latinx" 
+                                            checked={this.state.selected_ethnicity === 'hispanic_latinx'}
+                                            onClick={(event) => this.setState({
+                                                selected_ethnicity: 'hispanic_latinx'}, () => console.log(this.state))} />
+                                    Yes
+                                  </label>
+                                </div>
+                                <div className="radio">
+                                  <label>
+                                    <input  type="radio" 
+                                            value="Not_Hispanic_Latinx" checked={this.state.selected_ethnicity === 'not_hispanic_latinx'} 
+                                            onClick={(event) => this.setState({
+                                                selected_ethnicity: 'not_hispanic_latinx'}, () => console.log(this.state))}/>
+                                    No
+                                  </label>
+                                </div>
                                 <br></br>
                             </Col>
                             <Col>

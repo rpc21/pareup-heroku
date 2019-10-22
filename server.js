@@ -78,7 +78,7 @@ router.post('/putData', (req, res) => {
   // console.log('Entered post method');
 let data = new Data();
 
-const { id, job_title, ed_level, company_size, salary, equity, negotiated, one_time, lat, long, race, pronouns } = req.body;
+const { id, job_title, ed_level, company_size, salary, equity, negotiated, one_time, lat, long, race, ethnicity, pronouns } = req.body;
 if ( job_title==='' || company_size==='' || salary==='' || equity==='' || one_time==='' || ed_level==='' || negotiated==='') {
   return res.json({
     success: false,
@@ -96,7 +96,7 @@ data.one_time = one_time;
 data.lat = lat;
 data.long = long;
 data.race = race;
-// data.ethnicity = ethnicity;
+data.ethnicity = ethnicity;
 data.pronouns = pronouns;
 data.save((err) => {
     if (err) return res.json({ success: false, error: err });

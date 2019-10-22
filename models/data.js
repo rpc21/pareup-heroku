@@ -16,6 +16,7 @@ const DataSchema = new Schema(
     lat: Number,
     long: Number,
     race: [String],
+    ethnicity: String,
     pronouns: String
   },
   { timestamps: true }
