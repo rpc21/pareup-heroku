@@ -244,15 +244,15 @@ class OffersPage extends React.Component {
                         <div>
                             <div className="container-fluid justify-content-center">
                                 <Row>
-                                    <Col sm={12}>
+                                    <Col sm={12} lg={3.25}>
                                         <Card field='salary' data={this.applyFilters(this.state.data)}
                                             title='Base Salary' />
                                     </Col>
-                                    <Col sm={12}>
+                                    <Col sm={12} lg={3.25}>
                                         <Card field='equity' data={this.applyFilters(this.state.data)}
                                             title='Equity' />
                                     </Col>
-                                    <Col sm={12}>
+                                    <Col sm={12} lg={3.25}>
                                         <Card border="info" field='one_time' data={this.applyFilters(this.state.data)}
                                             title='One-Time Bonuses' />
                                     </Col>
