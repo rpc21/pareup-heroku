@@ -32,6 +32,7 @@ class SurveyPage extends React.Component {
             equity: 0,
             negotiated: "",
             one_time: 0,
+            year: "",
             selected_state: "Alabama",
             selected_city: "Abanda",
             selected_lat: 0,
@@ -67,6 +68,7 @@ class SurveyPage extends React.Component {
             salary: this.state.salary,
             equity: this.state.equity,
             negotiated: this.state.negotiated,
+            year: this.state.year,
             one_time: this.state.one_time,
             lat: this.state.selected_lat,
             long: this.state.selected_long,
@@ -91,6 +93,7 @@ class SurveyPage extends React.Component {
             company_size: "",
             salary: "",
             equity: "",
+            year: "",
             negotiated: "",
             one_time: "",
             selected_state: "Alabama",
@@ -197,6 +200,7 @@ class SurveyPage extends React.Component {
                                 </Row>
 
                                 <br></br>
+                                <br></br>
                                 <Form.Label>Did you negotiate this offer?</Form.Label>
                                 <br></br>
                                 <Dropdown placeholder='Select Yes or No'
@@ -204,6 +208,9 @@ class SurveyPage extends React.Component {
                                     onChange={(event, val) => this.setState({
                                         negotiated: val.value
                                     }, () => console.log(this.state))} />
+
+
+
                                 <br></br>
                             </Col>
                             <Col>
@@ -224,40 +231,55 @@ class SurveyPage extends React.Component {
                                         ed_level: val.value
                                     }, () => console.log(this.state))} />
                                 <br></br>
+                                <br></br>
+                                <Form.Label>In what year did you receive this offer?</Form.Label>
+                                <br></br>
+                                <input className="number-input"
+                                    type="number"
+                                    name="year"
+                                    placeholder="Year"
+                                    required={true}
+                                    onChange={(event) => this.setState({
+                                        year: event.target.value
+                                    }, () => console.log(this.state))} />
+                                <br></br>
+
                             </Col>
                         </Form.Row>
                         <br></br>
                         <h3>Personal Information (Optional)</h3>
                         <Form.Row>
-                        <Col>
+                            <Col>
                                 <Form.Label>Race</Form.Label>
                                 <br></br>
-                                <Dropdown   className='dropdown'
-                                            value={this.state.race}
-                                            placeholder='Select the race(s) you identify with'
-                                            fluid multiple search selection options={RACES.map(dat => ({ key: dat.name, value: dat.value, text: dat.value}))}
-                                            onChange={(event, val) => this.setState({
-                                                race: val.value
-                                            }, () => console.log(this.state))} />
+                                <Dropdown className='dropdown'
+                                    value={this.state.race}
+                                    placeholder='Select the race(s) you identify with'
+                                    fluid multiple search selection options={RACES.map(dat => ({ key: dat.name, value: dat.value, text: dat.value }))}
+                                    onChange={(event, val) => this.setState({
+                                        race: val.value
+                                    }, () => console.log(this.state))} />
                                 <br></br>
                                 <Form.Label>Do you identify as Hispanic or Latinx?</Form.Label>
                                 <div className="radio">
-                                  <label>
-                                    <input  type="radio" 
-                                            value="hispanic_latinx" 
-                                            checked={this.state.selected_ethnicity === 'hispanic_latinx'}
+                                    <label>
+                                        <input type="radio"
+                                            value="hispanic_latinx"
+                                            checked={this.state.ethnicity === 'hispanic_latinx'}
                                             onClick={(event) => this.setState({
-                                                selected_ethnicity: 'hispanic_latinx'}, () => console.log(this.state))} />
-                                    Yes
+                                                ethnicity: 'hispanic_latinx'
+                                            }, () => console.log(this.state))} />
+                                        Yes
                                   </label>
                                 </div>
                                 <div className="radio">
-                                  <label>
-                                    <input  type="radio" 
-                                            value="Not_Hispanic_Latinx" checked={this.state.selected_ethnicity === 'not_hispanic_latinx'} 
+                                    <label>
+                                        <input type="radio"
+                                            value="Not_Hispanic_Latinx" checked={this.state.ethnicity === 'not_hispanic_latinx'}
                                             onClick={(event) => this.setState({
-                                                selected_ethnicity: 'not_hispanic_latinx'}, () => console.log(this.state))}/>
-                                    No
+                                                ethnicity: 'not_hispanic_latinx'
+                                            }, () => console.log(this.state))} />
+                                        No
                                   </label>
                                 </div>
                                 <br></br>
@@ -290,7 +312,7 @@ class SurveyPage extends React.Component {
                                     <Modal.Title>Thank you for submitting your offer!</Modal.Title>
                                 </Modal.Header>
                                 <Modal.Footer>
-                                <Button size="lg" style={{ backgroundColor: '#007788', borderColor: '#007788' }}>
+                                    <Button size="lg" style={{ backgroundColor: '#007788', borderColor: '#007788' }}>
                                         <a href="/survey" className="nav-bar-link no-effect-on-hover">
                                             Submit Another Offer
                             </a>

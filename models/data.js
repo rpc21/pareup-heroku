@@ -13,6 +13,7 @@ const DataSchema = new Schema(
     equity: Number,
     negotiated: String,
     one_time: Number,
+    year: Number,
     lat: Number,
     long: Number,
     race: [String],
