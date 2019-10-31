@@ -21,7 +21,7 @@ function calcDist(lat1, lon1, lat2, lon2) {
     var a2 = lat2 * Math.PI / 180;
     // console.log('a2',a2);
     var del_lon = (lon2 - lon1) * Math.PI / 180;
-    var R = 6371*Math.pow(10,3); // gives d in metres
+    var R = 6371 * Math.pow(10, 3); // gives d in metres
     var d = Math.acos(Math.sin(a1) * Math.sin(a2) + Math.cos(a1) * Math.cos(a2) * Math.cos(del_lon)) * R;
     var miles = d / 1609.344;
     // console.log(miles);
@@ -48,6 +48,7 @@ class OffersPage extends React.Component {
             selected_city: "Abanda",
             selected_lat: 0,
             selected_long: 0,
+            school: 'Duke University',
             data: []
         }
 
@@ -143,20 +144,20 @@ class OffersPage extends React.Component {
                 <Form className='filter-list '>
                     <Form.Row>
                         <Col>
-                            <Form.Label>Education Level</Form.Label>
-                            <Multiselect className="filter" data={ED_LEVELS} textField={item => item.name}
-                                placeholder='All Education Levels'
-                                valueField={item => item.value}
-                                onChange={value => this.setState((value.length > 0) ?
-                                    { ed_levels: value } : { ed_levels: ED_LEVELS }, () => console.log())} />
-                        </Col>
-                        <Col>
                             <Form.Label>Job Title</Form.Label>
                             <Multiselect className="filter" data={JOB_TITLES} textField={item => item.name}
                                 placeholder='All Job Titles'
                                 valueField={item => item.value}
                                 onChange={value => this.setState((value.length > 0) ?
                                     { job_titles: value } : { job_titles: JOB_TITLES }, () => console.log())} />
+                        </Col>
+                        <Col>
+                            <Form.Label>Education Level</Form.Label>
+                            <Multiselect className="filter" data={ED_LEVELS} textField={item => item.name}
+                                placeholder='All Education Levels'
+                                valueField={item => item.value}
+                                onChange={value => this.setState((value.length > 0) ?
+                                    { ed_levels: value } : { ed_levels: ED_LEVELS }, () => console.log())} />
                         </Col>
                     </Form.Row>
                     <Form.Row>
@@ -185,8 +186,8 @@ class OffersPage extends React.Component {
                                 className="mt-auto"
                                 type="text"
                                 style={{ width: '40px', marginLeft: '10px', marginRight: '10px', borderRadius: '5px', borderWidth: '1px', height: '45px', textAlign: 'center' }}
-                                onChange={(e) => this.setState(isNaN(parseFloat(e.target.value))? {radius: 100000} 
-                               : { radius: parseFloat(e.target.value) })}
+                                onChange={(e) => this.setState(isNaN(parseFloat(e.target.value)) ? { radius: 100000 }
+                                    : { radius: parseFloat(e.target.value) })}
                                 placeholder="#"
                             />
 

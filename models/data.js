@@ -18,7 +18,8 @@ const DataSchema = new Schema(
     long: Number,
     race: [String],
     ethnicity: String,
-    pronouns: String
+    pronouns: String, 
+    school: String
   },
   { timestamps: true }
 );

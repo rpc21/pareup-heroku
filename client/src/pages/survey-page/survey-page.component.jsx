@@ -41,6 +41,7 @@ class SurveyPage extends React.Component {
             ethnicity: "",
             pronouns: "",
             data: [],
+            school: 'Duke University',
             show: false
 
         }
@@ -74,7 +75,8 @@ class SurveyPage extends React.Component {
             long: this.state.selected_long,
             race: this.state.race,
             ethnicity: this.state.ethnicity,
-            pronouns: this.state.pronouns
+            pronouns: this.state.pronouns,
+            school: this.state.school
         })
             .then(function (response) {
                 console.log(response);
@@ -103,6 +105,7 @@ class SurveyPage extends React.Component {
             race: "",
             ethnicity: "",
             pronouns: "",
+            school: "Duke University",
             data: []
         })
     }
